@@ -1,4 +1,6 @@
 const express = require("express");
+const morgan = require("morgan");
+
 const app = express();
 
 app.use(express.json());
@@ -26,6 +28,8 @@ let persons = [
   },
 ];
 
+app.use(morgan(`tiny`));
+
 const generateId = () => {
   const maxId = persons.length > 0 ? Math.max(...persons.map((n) => n.id)) : 0;
   return maxId + 1;
@@ -36,7 +40,7 @@ const isNameAlready = (name) => persons.some((person) => person.name === name);
 app.post("/api/persons", (request, response) => {
   const body = request.body;
 
-  if (!body.name || !body.number || IsNameAlready(body.name)) {
+  if (!body.name || !body.number || isNameAlready(body.name)) {
     return response.status(400).json({ error: "name must be unique" });
   }
 
