@@ -31,8 +31,14 @@ const generateId = () => {
   return maxId + 1;
 };
 
+const isNameAlready = (name) => persons.some((person) => person.name === name);
+
 app.post("/api/persons", (request, response) => {
   const body = request.body;
+
+  if (!body.name || !body.number || IsNameAlready(body.name)) {
+    return response.status(400).json({ error: "name must be unique" });
+  }
 
   const person = {
     id: generateId(),
